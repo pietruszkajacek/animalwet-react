@@ -1,8 +1,8 @@
 import React from 'react';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
-import { Link, DirectLink, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import { Events, Link, scrollSpy } from 'react-scroll';
 
 class Navigation extends React.Component {
     constructor(props) {
@@ -11,7 +11,7 @@ class Navigation extends React.Component {
         this.brand = props.brand;
         this.listItems = props.menuItems.map((menuItem) =>
             <Nav.Item as="li" key={menuItem.href} >
-                <Link className="nav-link" to={menuItem.href} spy={true} smooth={true} duration={500}>
+                <Link className="nav-link" to={menuItem.href} spy={true} smooth="easeInOutQuint" duration={1000}>
                     {menuItem.text}
                 </Link>                
             </Nav.Item>
@@ -47,23 +47,42 @@ class Navigation extends React.Component {
             this.setState({ isNavExpanded: false });
         }
     }
-
+    
     componentDidMount() {
         window.addEventListener('scroll', this.handleScroll);
-        window.addEventListener('click', this.handleClick, false); 
+        window.addEventListener('click', this.handleClick, false);
+
+        Events.scrollEvent.register('begin', (to, element) => {
+            this.setState((state, props) => {
+                return state.isNavExpanded ? {isNavExpanded: false} : {}
+            });
+        });
+
+        Events.scrollEvent.register('end', (to, element) => {
+            this.setState((state, props) => {
+                return state.isNavExpanded ? {isNavExpanded: false} : {}
+            });
+        });
+
+        scrollSpy.update();
     }
 
     componentWillUnmount() {
         window.removeEventListener('scroll', this.handleScroll);
         window.removeEventListener('click', this.handleClick, false);
+
+        Events.scrollEvent.remove('begin');
+        Events.scrollEvent.remove('end');        
     }
 
     render() {
         return (
-            <Navbar ref={node => this.node = node} collapseOnSelect expand="lg" fixed="top" id="mainNav" 
-                    onToggle={this.setIsNavExpanded} expanded={this.state.isNavExpanded} className={this.state.navShrink ? 'navbar-shrink' : ''}>
+            <Navbar ref={node => this.node = node} expand="lg" fixed="top" id="mainNav" onToggle={this.setIsNavExpanded}
+                expanded={this.state.isNavExpanded} className={this.state.navShrink ? 'navbar-shrink' : ''}>
                 <Container>
-                    <Navbar.Brand href="#">{this.brand}</Navbar.Brand>
+                    <Link className="navbar-brand" to="page-top" spy={true} smooth="easeInOutQuint" duration={1000}>
+                        {this.brand} 
+                    </Link>                
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav as="ul" className="ml-auto">{this.listItems}</Nav>

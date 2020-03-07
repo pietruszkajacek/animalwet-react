@@ -10,7 +10,7 @@ function About(props) {
             <Container>
                 <Row>
                     <Col lg={8} className="mx-auto">
-                        <h2 className="text-white mb-4">Gabinet weterynaryjny Mikrowet</h2>
+                        <h2 className="text-white mb-4">Gabinet weterynaryjny {props.brand}</h2>
                         <p className="text-white-50">{props.about}
                         </p>
                     </Col>

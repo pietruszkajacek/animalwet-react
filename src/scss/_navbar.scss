@@ -56,15 +56,6 @@
         color: $black;
       }
 
-      li.active {
-        .nav-link {
-            color: $primary;
-            outline: none;
-            border-bottom: 0.25rem solid $primary;
-        }          
-      }
-
-
       .nav-link {
         color: $black;
         padding: 1.5rem 1.5rem 1.25rem;
