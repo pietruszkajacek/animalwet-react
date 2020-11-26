@@ -1,5 +1,5 @@
 .services-section {
-    padding-top: 10rem;
+    padding-top: 5rem;
     .services-text {
         padding: 3rem;
         font-size: 90%;
@@ -10,6 +10,11 @@
             border-width: .25rem;
             width: 30%;
           }
+        }
+        .collaps {
+          height: 0;
+          overflow: hidden;
+          transition: height .5s;
         }
       }
 }
