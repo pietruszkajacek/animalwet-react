@@ -1,34 +1,94 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 
-function Collapse(props) {
-    const ref = useRef(null);
-    const [showCollapse, setShowCollapse] = useState(false);
-    const short = props.short;
-    const collapse = props.collapse;
+class Collapse extends React.Component {
+    constructor(props) {
+        super(props);
+        this.myRef = React.createRef();
 
-    function showHide() {
-        setShowCollapse(!showCollapse);
+        this.state = { classCss: "collapseAV", inLineCss: -1 };
+
+        this.handleClick = this.handleClick.bind(this);
+        this.handleTransition = this.handleTransition.bind(this);
     }
 
-    return (
-        <>
-            <p className="mb-0 text-white-50" onClick={showHide}>
-                {short}
-            </p>
-            <div
-                className={"collaps"}
-                style={
-                    showCollapse
-                        ? { height: ref.current.offsetHeight + "px" }
-                        : {}
-                }
-            >
-                <p ref={ref} className="mb-0 text-white-50" onClick={showHide}>
-                    {collapse}
+    handleClick() {
+        if (this.state.classCss === "collapseAV") {
+            this.setState((state) => {
+                return { classCss: "collapsingAV" };
+            });
+        } else if (this.state.classCss === "collapseAV showAV") {
+            this.setState((state) => {
+                return {
+                    classCss: "collapsingAV",
+                    inLineCss: this.myRef.current.offsetHeight,
+                };
+            });
+        }
+    }
+
+    handleTransition() {
+        if (
+            this.state.classCss === "collapsingAV" &&
+            this.state.inLineCss !== -1
+        ) {
+            this.setState((state) => ({
+                classCss: "collapseAV showAV",
+                inLineCss: -1,
+            }));
+        } else if (
+            this.state.classCss === "collapsingAV" &&
+            this.state.inLineCss === -1
+        ) {
+            this.setState((state) => ({
+                classCss: "collapseAV",
+                inLineCss: -1,
+            }));
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (
+            prevState.classCss === "collapseAV" &&
+            this.state.classCss === "collapsingAV"
+        ) {
+            this.setState((state) => ({
+                inLineCss: this.myRef.current.offsetHeight,
+            }));
+        } else if (
+            prevState.classCss === "collapseAV showAV" &&
+            prevState.inLineCss === -1
+        ) {
+            setTimeout(() => {
+                this.setState((state) => ({
+                    inLineCss: -1,
+                }));
+            }, 0);
+        }
+    }
+
+    render() {
+        return (
+            <>
+                <p className="mb-0 text-white-50" onClick={this.handleClick}>
+                    {this.props.short}
                 </p>
-            </div>
-        </>
-    );
+                <div
+                    onClick={this.handleClick}
+                    onTransitionEnd={this.handleTransition}
+                    className={this.state.classCss}
+                    style={
+                        this.state.inLineCss !== -1
+                            ? { height: this.state.inLineCss + "px" }
+                            : {}
+                    }
+                >
+                    <p ref={this.myRef} className="mb-0 text-white-50">
+                        {this.props.collapse}
+                    </p>
+                </div>
+            </>
+        );
+    }
 }
 
 export default Collapse;

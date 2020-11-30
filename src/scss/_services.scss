@@ -11,10 +11,16 @@
             width: 30%;
           }
         }
-        .collaps {
+        .collapsingAV {
+          position: relative;
           height: 0;
           overflow: hidden;
           transition: height .5s;
+        }
+        .collapseAV {
+          &:not(.showAV) {
+            display: none;
+          }        
         }
       }
 }

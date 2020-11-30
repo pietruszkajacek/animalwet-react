@@ -20,7 +20,7 @@ function Services(props) {
                     let collapse = service.items.slice(10);
 
                     short = short.map((item, i, arr) => {
-                        let s = '';
+                        let s;
                         if (i === 0) {
                             s = `${item[0].toUpperCase()}${item.slice(1)}, `;
                         } else if (i === arr.length - 1) {
@@ -32,7 +32,7 @@ function Services(props) {
                     })
 
                     collapse = collapse.map((item, i, arr) => {
-                        let s = '';
+                        let s;
                         if (i === 0) {
                             s = `...${item}, `;
                         } else if (i === arr.length - 1) {
@@ -67,7 +67,7 @@ function Services(props) {
                                                 short={short}
                                                 collapse={collapse}
                                             />
-                                            <hr class="d-none d-lg-block mb-0 ml-0"></hr>
+                                            <hr className="d-none d-lg-block mb-0 ml-0"></hr>
                                         </div>
                                     </div>
                                 </div>
