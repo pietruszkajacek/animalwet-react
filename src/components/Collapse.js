@@ -54,6 +54,12 @@ class Collapse extends React.Component {
             this.setState((state) => ({
                 inLineCss: this.myRef.current.offsetHeight,
             }));
+            // Emulate TransitionEnd
+            if (this.myRef.current.offsetHeight === 0) {
+                setTimeout(() => {
+                    this.handleTransition();
+                }, 350);
+            }
         } else if (
             prevState.classCss === "collapseAV showAV" &&
             prevState.inLineCss === -1
@@ -63,6 +69,13 @@ class Collapse extends React.Component {
                     inLineCss: -1,
                 }));
             }, 0);
+
+            // Emulate TransitionEnd
+            if (this.myRef.current.offsetHeight === 0) {
+                setTimeout(() => {
+                    this.handleTransition();
+                }, 350);
+            }
         }
     }
 
